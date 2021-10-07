@@ -1,0 +1,72 @@
+
+[91mPropertyNotFoundException: [0mC:\Users\djama\coding-projects\nvx-fw-update-pwsh\nvx-fw-update-pwsh.ps1:84
+[96mLine |
+[96m  84 | [0m while([96m(Get-Job -State Running).count[0m){
+[96m     | [91m       ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[91m[96m     | [91mThe property 'count' cannot be found on this object. Verify that the property exists.
+[0m
+
+[91mAdd-Type: [0mC:\Users\djama\OneDrive\Documents\PowerShell\Modules\PSCrestron\ToolboxSession.psm1:71
+[96mLine |
+[96m  71 | [0m [96mAdd-Type @"[0m
+[96m     | [91m ~~~~~~~~~~~
+[91m[96m     | [91mCannot add type. Compilation errors occurred.
+[0m
+
+[91mAdd-Type: [0mC:\Users\djama\OneDrive\Documents\PowerShell\Modules\PSCrestron\ToolboxSession.psm1:71
+[96mLine |
+[96m  71 | [0m [96mAdd-Type @"[0m
+[96m     | [91m ~~~~~~~~~~~
+[91m[96m     | [91m(18,30): error CS0012: The type 'Enum' is defined in an assembly that is not referenced. You must add a reference to assembly 'mscorlib,
+[96m     | [91mVersion=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.             if(lQueryType ==
+[96m     | [91mCrestron.Toolbox.VptCOMServer.Interop.EVptQueryType.EVptQueryType_SendDefaultIPTable)                              ^
+[0m
+
+[91mAdd-Type: [0mC:\Users\djama\OneDrive\Documents\PowerShell\Modules\PSCrestron\ToolboxSession.psm1:71
+[96mLine |
+[96m  71 | [0m [96mAdd-Type @"[0m
+[96m     | [91m ~~~~~~~~~~~
+[91m[96m     | [91m(15,30): error CS0012: The type 'Enum' is defined in an assembly that is not referenced. You must add a reference to assembly 'mscorlib,
+[96m     | [91mVersion=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.             if(lQueryType ==
+[96m     | [91mCrestron.Toolbox.VptCOMServer.Interop.EVptQueryType.EVptQueryType_GeneralNotificationYesNoCancel)                              ^
+[0m
+
+[91mAdd-Type: [0mC:\Users\djama\OneDrive\Documents\PowerShell\Modules\PSCrestron\ToolboxSession.psm1:71
+[96mLine |
+[96m  71 | [0m [96mAdd-Type @"[0m
+[96m     | [91m ~~~~~~~~~~~
+[91m[96m     | [91m(13,33): error CS0012: The type 'Enum' is defined in an assembly that is not referenced. You must add a reference to assembly 'mscorlib,
+[96m     | [91mVersion=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.                 ppszwResponse =
+[96m     | [91mCrestron.Toolbox.VptCOMServer.Interop.EVptQueryResponseCategory.EVptQueryResponseCategory_ConfirmOk.ToString();                           
+[96m     | [91m^
+[0m
+
+[91mAdd-Type: [0mC:\Users\djama\OneDrive\Documents\PowerShell\Modules\PSCrestron\ToolboxSession.psm1:71
+[96mLine |
+[96m  71 | [0m [96mAdd-Type @"[0m
+[96m     | [91m ~~~~~~~~~~~
+[91m[96m     | [91m(12,30): error CS0012: The type 'Enum' is defined in an assembly that is not referenced. You must add a reference to assembly 'mscorlib,
+[96m     | [91mVersion=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.             if(lQueryType ==
+[96m     | [91mCrestron.Toolbox.VptCOMServer.Interop.EVptQueryType.EVptQueryType_GeneralNotificationServer)                              ^
+[0m
+
+[91mAdd-Type: [0mC:\Users\djama\OneDrive\Documents\PowerShell\Modules\PSCrestron\ToolboxSession.psm1:71
+[96mLine |
+[96m  71 | [0m [96mAdd-Type @"[0m
+[96m     | [91m ~~~~~~~~~~~
+[91m[96m     | [91m(7,21): error CS1545: Property, indexer, or event '_IVptSession2Events_Event.OnViewportQuery' is not supported by the language; try
+[96m     | [91mdirectly calling accessor methods '_IVptSession2Events_Event.add_OnViewportQuery(_IVptSession2Events_OnViewportQueryEventHandler)' or
+[96m     | [91m'_IVptSession2Events_Event.remove_OnViewportQuery(_IVptSession2Events_OnViewportQueryEventHandler)'             session.OnViewportQuery +=
+[96m     | [91mOnViewportQueryCallback;                     ^
+[0m
+
+[91mAdd-Type: [0mC:\Users\djama\OneDrive\Documents\PowerShell\Modules\PSCrestron\ToolboxSession.psm1:71
+[96mLine |
+[96m  71 | [0m [96mAdd-Type @"[0m
+[96m     | [91m ~~~~~~~~~~~
+[91m[96m     | [91m(10,205): error CS0012: The type 'Enum' is defined in an assembly that is not referenced. You must add a reference to assembly 'mscorlib,
+[96m     | [91mVersion=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089'.         private void OnViewportQueryCallback(int nTransactionID,
+[96m     | [91m[System.Runtime.InteropServices.ComAliasName("Crestron.Toolbox.VptCOMServer.Interop.EVptQueryType")]
+[96m     | [91mCrestron.Toolbox.VptCOMServer.Interop.EVptQueryType lQueryType, string pszwQueryPrompt, ref string ppszwResponse, int nUserPassBack)      
+[96m     | [91m^
+[0m
