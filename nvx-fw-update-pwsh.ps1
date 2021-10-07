@@ -63,6 +63,9 @@ $fwCheck = {
         write-host 'Sending update'
         Send-CrestronFirmware -Device $dev.ip -LocalFile $fw -Secure -Username $uName -Password $pWord
     } 
+}
+
+$fwRun = {    
     if ($updateNeed -match ('True')) {
         # Read-Host -Prompt “Press Enter When Ready To Update”
         #Invoke-CrestronCommand -Device $dev -Command imgupd -Password $pWord -Secure -Username $uName
