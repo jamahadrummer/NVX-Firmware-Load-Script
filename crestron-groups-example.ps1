@@ -10,19 +10,16 @@ Write-Host 'Importing libraries' -ForegroundColor DarkYellow
 Import-Module PSCrestron
 
 # import file
-try
-    {
-        $devs = @(Get-Content -Path (Join-Path $PSScriptRoot\ScriptInput 'devices.txt'))
-        Write-Host 'Obtaining list of devices' -ForegroundColor DarkYellow
+try {
+    $devs = @(Get-Content -Path (Join-Path $PSScriptRoot\ScriptInput 'devices.txt'))
+    Write-Host 'Obtaining list of devices' -ForegroundColor DarkYellow
 }
-catch
-    {
-        Write-Host 'Error Obtaining list of devices' -ForegroundColor Red
+catch {
+    Write-Host 'Error Obtaining list of devices' -ForegroundColor Red
 }
 
-foreach ($d in $devs)
-    {
-        Write-host "$d" -ForegroundColor DarkYellow
+foreach ($d in $devs) {
+    Write-host "$d" -ForegroundColor DarkYellow
 }
 
 # define variables
@@ -42,62 +39,50 @@ $confirmation = Read-Host "Do you want to send the command: $command after uploa
 
 # loop for each device
 
-if ($confirmation -eq 'y') 
-    {
-        switch ($port)
-        {
-            22
-            {
-                # loop for each device
-                foreach ($d in $devs)
-            {
-            Write-Host 'Uploading file to:' $d -ForegroundColor green
-            Send-FTPFile -Device $d -LocalFile $source -RemoteFile $destination  -Password $password -Port $port -Secure -Username $username -ErrorAction SilentlyContinue
-                Invoke-CrestronCommand -Device $d -Command $command -Password $password -Port $port -Secure -Username $username -ErrorAction SilentlyContinue
-                }
-            }
-
-
-
-            41795 
-            {
-                # loop for each device
-                foreach ($d in $devs)
-            {
+if ($confirmation -eq 'y') {
+    switch ($port) {
+        22 {
+            # loop for each device
+            foreach ($d in $devs) {
                 Write-Host 'Uploading file to:' $d -ForegroundColor green
-            Send-FTPFile -Device $d -LocalFile $source -RemoteFile $destination -ErrorAction SilentlyContinue
+                Send-FTPFile -Device $d -LocalFile $source -RemoteFile $destination  -Password $password -Port $port -Secure -Username $username -ErrorAction SilentlyContinue
+                Invoke-CrestronCommand -Device $d -Command $command -Password $password -Port $port -Secure -Username $username -ErrorAction SilentlyContinue
+            }
+        }
+
+
+
+        41795 {
+            # loop for each device
+            foreach ($d in $devs) {
+                Write-Host 'Uploading file to:' $d -ForegroundColor green
+                Send-FTPFile -Device $d -LocalFile $source -RemoteFile $destination -ErrorAction SilentlyContinue
                 Invoke-CrestronCommand -Device $d -Command $command -ErrorAction SilentlyContinue            
             }    
-            }
         }
     }
-else
-    {
-        switch ($port)
-        {
-            22
-            {
-                # loop for each device
-                foreach ($d in $devs)
-            {
-            Write-Host 'Uploading file to:' $d -ForegroundColor green
-            Send-FTPFile -Device $d -LocalFile $source -RemoteFile $destination  -Password $password -Port $port -Secure -Username $username -ErrorAction SilentlyContinue
-                }
-            }
-
-
-
-            41795 
-            {
-                # loop for each device
-                foreach ($d in $devs)
-            {
+}
+else {
+    switch ($port) {
+        22 {
+            # loop for each device
+            foreach ($d in $devs) {
                 Write-Host 'Uploading file to:' $d -ForegroundColor green
-            Send-FTPFile -Device $d -LocalFile $source -RemoteFile $destination -ErrorAction SilentlyContinue
-                }    
+                Send-FTPFile -Device $d -LocalFile $source -RemoteFile $destination  -Password $password -Port $port -Secure -Username $username -ErrorAction SilentlyContinue
             }
         }
+
+
+
+        41795 {
+            # loop for each device
+            foreach ($d in $devs) {
+                Write-Host 'Uploading file to:' $d -ForegroundColor green
+                Send-FTPFile -Device $d -LocalFile $source -RemoteFile $destination -ErrorAction SilentlyContinue
+            }    
+        }
     }
+}
 
 
 
