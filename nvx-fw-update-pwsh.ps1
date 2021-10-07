@@ -32,9 +32,9 @@ Write-Host @"
 "@
 
 
-$stopwatch =  [system.diagnostics.stopwatch]::StartNew()
+$stopwatch = [system.diagnostics.stopwatch]::StartNew()
 Import-Module PSCrestron
-$ResultsTable =@()
+$ResultsTable = @()
 ###############################################################
 ##Enter admin creditionals here#####
 ###############################################################
@@ -49,32 +49,32 @@ $fwVersion = '6.0.4835.00027'
 ###############################################################
 # start the jobs
 foreach ($dev in $deviceList) {
-        write-host $dev
-        'Checking If Update Is Needed'
-            if($dev.Description -match($fwVersion))
-            {    Write-Host 'Unit Up To Date'
-                 $updateNeed = 'False'
-            }          
-            elseif($dev.Description -inotmatch($fwVersion)) 
-            {Write-Host 'Unit Needs Update'
-             $updateNeed = 'True'
-             write-host 'Sending update'
+    write-host $dev
+    'Checking If Update Is Needed'
+    if ($dev.Description -match ($fwVersion)) {
+        Write-Host 'Unit Up To Date'
+        $updateNeed = 'False'
+    }          
+    elseif ($dev.Description -inotmatch ($fwVersion)) {
+        Write-Host 'Unit Needs Update'
+        $updateNeed = 'True'
+        write-host 'Sending update'
 
-             Send-CrestronFirmware -Device $dev.ip -LocalFile $fw -Secure -Username $uName -Password $pWord
-            } 
-        }
+        Send-CrestronFirmware -Device $dev.ip -LocalFile $fw -Secure -Username $uName -Password $pWord
+    } 
+}
 
 foreach ($dev in $deviceList) {
-        if($updateNeed -match('True'))
-            {Read-Host -Prompt “Press Enter When Ready To Update”
-             #Invoke-CrestronCommand -Device $dev -Command imgupd -Password $pWord -Secure -Username $uName
-             Write-Host 'IMGUPD Command Sent'
-             }
-             elseif ($updateNeed -match('False'))
-            {write-host $dev
-            'Update not Sent, Check Version/Connection'
-         }
-         }
+    if ($updateNeed -match ('True')) {
+        Read-Host -Prompt “Press Enter When Ready To Update”
+        #Invoke-CrestronCommand -Device $dev -Command imgupd -Password $pWord -Secure -Username $uName
+        Write-Host 'IMGUPD Command Sent'
+    }
+    elseif ($updateNeed -match ('False')) {
+        write-host $dev
+        'Update not Sent, Check Version/Connection'
+    }
+}
 
 # Return the results
 #-------------------
