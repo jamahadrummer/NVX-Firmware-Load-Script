@@ -15,15 +15,18 @@ $fw = "G:\My Drive\Abt Commercial Audio Video\Danny Jama\Updating\Crestron\NVX F
 $fwVersion = '6.0.4835.00027'
 ###############################################################
 foreach ($dev in $deviceList) {
-    write-host $dev.hostname 'Checking If Update Is Needed'
     if ($dev.Description -match ($fwVersion)) {
-        Write-Host $dev.hostname 'Unit Up To Date'
         $updateNeed = 'False'
     }          
     elseif ($dev.Description -inotmatch ($fwVersion)) {
-        Write-Host $dev.hostname 'Unit Needs Update'
         $updateNeed = 'True'
-        write-host $dev.hostname 'Sending update'
-        Send-CrestronFirmware -Device $dev.ip -LocalFile $fw -Secure -Username $uName -Password $pWord
+    }
+    if ($updateNeed -match ('True')) {
+        #Read-Host -Prompt 'Press Enter When Ready To Update'ù
+        #Invoke-CrestronCommand -Device $dev -Command imgupd -Password $pWord -Secure -Username $uName
+        Write-Host $dev.hostname 'IMGUPD Command Sent'
+    }
+    elseif ($updateNeed -match ('False')) {
+        write-host $dev.hostname 'Update not Sent, Check Version/Connection'
     }
 }
