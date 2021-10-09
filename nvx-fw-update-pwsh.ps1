@@ -25,7 +25,6 @@ Write-Host @"
 
 # $stopwatch = [system.diagnostics.stopwatch]::StartNew()
 Import-Module PSCrestron
-Import-
 $VerbosePreference = "continue"
 # $ResultsTable = @()
 ###############################################################
@@ -42,14 +41,9 @@ $fwVersion = '6.0.4835.00027'
 ###############################################################
 ##Define Scripts for jobs######################################
 ###############################################################
-$fwCheck = {
-    write-host 'Checking If Update Is Needed'
-    if ($dev.Description -match ($fwVersion)) {
-        Write-Host 'Unit Up To Date'
-    }          
-    elseif ($dev.Description -inotmatch ($fwVersion)) {
-        Write-Host 'Unit Needs Update'
-        write-host 'Sending update'
+
+$fwSend = {
+    if ($sendNeed = 'True') {
         Send-CrestronFirmware -Device $dev.ip -LocalFile $fw -Secure -Username $uName -Password $pWord
     }
 }
@@ -74,12 +68,26 @@ $fwCheckAndRun = {
 # start the jobs
 
 foreach ($dev in $deviceList) {
-    Start-Job -ScriptBlock $fwCheck
-    #Start-Job -ScriptBlock $fwCheckAndRun
-    #get-job | Receive-Job
-    
+    write-host 'Checking If Update Is Needed'
+    if ($dev.Description -match ($fwVersion)) {
+        Write-Host 'Unit Up To Date'
+        $sendNeed = 'False'
+    }          
+    elseif ($dev.Description -inotmatch ($fwVersion)) {
+        Write-Host 'Unit Needs Update'
+        write-host 'Sending update'
+        $sendNeed = 'True'
+    }
+    timeout 10
+    Start-Job -ScriptBlock $fwSend
+    #Start-Job -ScriptBlock $fwCheckAndRun    
 }
 
+
+timeout 15
+get-job
+timeout 10
+get-job | Receive-Job
 
 
 # # Return the results
