@@ -3,10 +3,6 @@ Set-StrictMode -Version Latest
 
 Write-Host @"
 
-
-
-
-
 ███╗   ██╗██╗   ██╗██╗  ██╗    ██╗   ██╗██████╗ ██████╗  █████╗ ████████╗███████╗    ███████╗ ██████╗██████╗ ██╗██████╗ ████████╗
 ████╗  ██║██║   ██║╚██╗██╔╝    ██║   ██║██╔══██╗██╔══██╗██╔══██╗╚══██╔══╝██╔════╝    ██╔════╝██╔════╝██╔══██╗██║██╔══██╗╚══██╔══╝
 ██╔██╗ ██║██║   ██║ ╚███╔╝     ██║   ██║██████╔╝██║  ██║███████║   ██║   █████╗      ███████╗██║     ██████╔╝██║██████╔╝   ██║   
@@ -14,33 +10,28 @@ Write-Host @"
 ██║ ╚████║ ╚████╔╝ ██╔╝ ██╗    ╚██████╔╝██║     ██████╔╝██║  ██║   ██║   ███████╗    ███████║╚██████╗██║  ██║██║██║        ██║   
 ╚═╝  ╚═══╝  ╚═══╝  ╚═╝  ╚═╝     ╚═════╝ ╚═╝     ╚═════╝ ╚═╝  ╚═╝   ╚═╝   ╚══════╝    ╚══════╝ ╚═════╝╚═╝  ╚═╝╚═╝╚═╝        ╚═╝   
 
-
-
-
 ################################################################
 ################################################################
 ##Beep Boop, I am a computer, I am a lightbulb that does math.##
 ################################################################
 ################################################################
 ##########Script Hacked Together by: Daniel Jama################
-############Last Updated: 2021_08_12 by DJ######################
+############Last Updated: 2021_10_09 by DJ######################
 ################################################################
 ################################################################
-
-
 
 "@
 
 
-$stopwatch = [system.diagnostics.stopwatch]::StartNew()
+# $stopwatch = [system.diagnostics.stopwatch]::StartNew()
 Import-Module PSCrestron
 $VerbosePreference = "continue"
-$ResultsTable = @()
+# $ResultsTable = @()
 ###############################################################
 ##Enter admin creditionals here#####
 ###############################################################
 $uName = 'admin'
-$pWord = 'admin'
+$pWord = 'AbtCre$tron'
 $deviceList = Get-AutoDiscovery -Pattern nvx -ShowProgress
 ###############################################################
 ##Enter full path to firmware file and version number here#####
@@ -51,53 +42,51 @@ $fwVersion = '6.0.4835.00027'
 ##Define Scripts for jobs######################################
 ###############################################################
 $fwCheck = {
-    write-host $dev
-    'Checking If Update Is Needed'
+    write-host $dev.hostname 'Checking If Update Is Needed'
     if ($dev.Description -match ($fwVersion)) {
-        Write-Host 'Unit Up To Date'
+        Write-Host $dev.hostname 'Unit Up To Date'
+    }          
+    elseif ($dev.Description -inotmatch ($fwVersion)) {
+        Write-Host $dev.hostname 'Unit Needs Update'
+        write-host $dev.hostname 'Sending update'
+        Send-CrestronFirmware -Device $dev.ip -LocalFile $fw -Secure -Username $uName -Password $pWord
+    }
+}
+
+$fwCheckAndRun = {
+    if ($dev.Description -match ($fwVersion)) {
         $updateNeed = 'False'
     }          
     elseif ($dev.Description -inotmatch ($fwVersion)) {
-        Write-Host 'Unit Needs Update'
         $updateNeed = 'True'
-        write-host 'Sending update'
-        Send-CrestronFirmware -Device $dev.ip -LocalFile $fw -Secure -Username $uName -Password $pWord
-    } 
-}
-
-$fwRun = {    
+    }
     if ($updateNeed -match ('True')) {
-        # Read-Host -Prompt “Press Enter When Ready To Update”
+        #Read-Host -Prompt “Press Enter When Ready To Update”
         #Invoke-CrestronCommand -Device $dev -Command imgupd -Password $pWord -Secure -Username $uName
-        Write-Host 'IMGUPD Command Sent'
+        Write-Host $dev.hostname 'IMGUPD Command Sent'
     }
     elseif ($updateNeed -match ('False')) {
-        write-host $dev
-        'Update not Sent, Check Version/Connection'
+        write-host $dev.hostname 'Update not Sent, Check Version/Connection'
     }
-} 
-
+}
 
 # start the jobs
 
 foreach ($dev in $deviceList) {
-    Start-Job -ScriptBlock $fwCheck -Name $dev 
+    Start-Job -ScriptBlock $fwCheck
+    #Start-Job -ScriptBlock $fwCheckAndRun
+    get-job | Receive-Job
+    
 }
 
-Receive-Job
-
-# while((Get-Job -State Running).count){
-#     Get-Job | Where-Object {$_.State -eq 'Complete' -and $_.HasMoreData} | ForEach-Object {Receive-Job $_}
-#     start-sleep -seconds 1
-# }
 
 
-# Return the results
-#-------------------
-$Error | Out-File (Join-Path $PSScriptRoot 'Firmware ERROR LOG.txt')
-$ResultsTable | Out-GridView
-$ResultsTable | Select-Object -Property "Device", "Hostname", "Prompt", "Serial", "MACAddress", "VersionOS", "Category", "Set Static IP", "Firmware Upgrade", "Auth Method", "ErrorMessage" | Export-Csv -Path $PSScriptRoot\"Firmware Upgrade Results.csv" -NoTypeInformation
+# # Return the results
+# #-------------------
+# $Error | Out-File (Join-Path $PSScriptRoot 'Firmware ERROR LOG.txt')
+# $ResultsTable | Out-GridView
+# $ResultsTable | Select-Object -Property "Device", "Hostname", "Prompt", "Serial", "MACAddress", "VersionOS", "Category", "Set Static IP", "Firmware Upgrade", "Auth Method", "ErrorMessage" | Export-Csv -Path $PSScriptRoot\"Firmware Upgrade Results.csv" -NoTypeInformation
 
-#Total time of script
-$stopwatch
-Read-Host -Prompt “Press Enter to exit”
+# #Total time of script
+# $stopwatch
+# Read-Host -Prompt “Press Enter to exit”
